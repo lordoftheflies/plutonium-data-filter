@@ -21,7 +21,7 @@ Data filter form.
 
             }
 
-           
+
 
             #editorContainer {
                 display: block;
@@ -108,6 +108,7 @@ Data filter form.
             _onAddNewDimensionFilter: function (event, details) {
                 this._stamp(details.item.name);
                 console.debug(this.is, 'add new filter to domain[' + details.item.name + ']');
+                this.fire('filtered-data-add-resize', {});
             },
             _onSubmitFilter: function () {
 //                Object.keys(this.filterModel).forEach(function (currentValue, index, arr) {
@@ -144,6 +145,8 @@ Data filter form.
                 Object.keys(this.filterModel).forEach(function (currentValue, index, arr) {
                     Polymer.dom(this.$.filters).removeChild(Polymer.dom(this.$.filters).querySelector('#' + currentValue));
                 }, this);
+                this.fire('filtered-data-add-resize', {});
+                
             },
             _onOpenForEdit: function () {
                 this._editMode = true;
