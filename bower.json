@@ -2,6 +2,24 @@
   "name": "plutonium-data-filter",
   "description": "Data filter form.",
   "main": "plutonium-data-filter.html",
+  "keywords": [
+    "html5", 
+    "polymer", 
+    "plutonium", 
+    "view"
+  ],
+  "authors": [
+    "lordoftheflies <heglas11@gmail.com>"
+  ],
+  "license": "MIT",
+    "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "private": false,
   "dependencies": {
     "polymer": "Polymer/polymer#^1.4.0",
     "paper-button": "PolymerElements/paper-button#^1.0.14",
