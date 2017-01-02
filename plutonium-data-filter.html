@@ -1,0 +1,172 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../iron-form/iron-form.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../paper-menu/paper-menu.html">
+<link rel="import" href="../paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../paper-item/paper-item.html">
+<link rel="import" href="plutonium-data-filter-icons.html">
+<!--
+`plutonium-data-filter`
+Data filter form.
+
+@demo demo/index.html 
+-->
+
+<dom-module id="plutonium-data-filter">
+    <template>
+        <style include="iron-flex">
+            :host {
+
+            }
+
+            paper-button.main-action {
+                color: var(--paper-pink-a200);
+                --paper-button-ink-color: var(--paper-pink-a200);
+            }
+            paper-button.main-action:hover {
+                background-color: var(--paper-pink-100);
+            }
+
+            #editorContainer {
+                display: block;
+                @apply(--layout-horizontal);
+            }
+
+        </style>
+
+        <content id="templates" select="template"></content>
+
+        <div id="displayContainer" class="layout horizontal" hidden$="[[_editMode]]">
+             <div class="flex"></div>
+            <paper-icon-button icon="plutonium-data-filter-icons:search" on-tap="_onOpenForEdit" title="Szűrés a mérési eredmények között"></paper-icon-button>
+        </div>
+
+        <form is="iron-form" action="[[filterUrl]]" method="POST" content-type="application/json" id="editorContainer" class="layout horizontal" hidden$="[[!_editMode]]">
+              <paper-menu-button>
+                <paper-icon-button icon="plutonium-data-filter-icons:add-domain" class="dropdown-trigger" title="Új szűrőfeltétel hozzádása"></paper-icon-button>
+                <paper-menu class="dropdown-content">
+                    <template is="dom-repeat" items="[[dataDomains]]" as="dataDomain">
+                        <paper-item name="[[dataDomain.id]]" title="[[dataDomain.description]]">[[dataDomain.label]]</paper-item>
+                    </template>
+                </paper-menu>
+            </paper-menu-button>
+
+            <div id="filters" class="layout horizontal wrap flex"></div>
+
+            <paper-icon-button icon="plutonium-data-filter-icons:clear" class="" on-tap="_onClearFilter" title="Szűrési feltételek törlése"></paper-icon-button>
+
+            <paper-button raised class="main-action" on-tap="_onSubmitFilter" title="Szűrés indítása">Szűrés</paper-button>
+        </form>
+    </template>
+
+    <script>
+        Polymer({
+
+            is: 'plutonium-data-filter',
+
+            properties: {
+                dataDomains: {
+                    type: Array,
+                    notify: true
+                },
+
+                domainFilters: {
+                    type: Array,
+                    notify: true
+                },
+
+                /**
+                 * Object to be bound to referenced template.
+                 */
+                bind: {
+                    type: Object,
+                    observer: '_bindChanged'
+                },
+
+                filterUrl: {
+                    type: String,
+                    notify: true
+                },
+                filterModel: {
+                    type: Object,
+                    notify: true,
+                    reflectToAttribute: true,
+                    value: {}
+                },
+                _editMode: {
+                    type: Boolean,
+                    notify: true,
+                    value: false
+                }
+            },
+
+            listeners: {
+                'iron-select': '_onAddNewDimensionFilter',
+                'iron-form-response': '_onSubmitFilterResponse',
+                'iron-form-error': '_onSubmitFilterError'
+            },
+
+            behaviors: [
+                Polymer.Templatizer
+            ],
+            _onAddNewDimensionFilter: function (event, details) {
+                this._stamp(details.item.name);
+                console.debug(this.is, 'add new filter to domain[' + details.item.name + ']');
+            },
+            _onSubmitFilter: function () {
+//                Object.keys(this.filterModel).forEach(function (currentValue, index, arr) {
+//                    this.filterModel[currentValue] = this.$$('#' + currentValue).value;
+//                }, this);
+                this.filterModel = this.$.editorContainer.serialize();
+                console.debug(this.is, 'filtering for', this.filterModel);
+                this.fire('filtered-data-request', this.filterModel);
+                this.$.editorContainer.submit();
+            },
+            _onSubmitFilterResponse: function (event, response) {
+                this._editMode = false;
+                console.debug(this.is, 'fetched filtered data successfully', response.response);
+                this.fire('filtered-data-response', response.response);
+            },
+            _onSubmitFilterError: function (event, response) {
+                console.warn(this.is, 'fetching filtered data failed', response.error);
+                this._editMode = true;
+                this.fire('filtered-data-error', response.error);
+            },
+            _onClearFilter: function () {
+                Object.keys(this.filterModel).forEach(function (currentValue, index, arr) {
+                    Polymer.dom(this.$.filters).removeChild(Polymer.dom(this.$.filters).querySelector('#' + currentValue));
+                }, this);
+                this.filterModel = {};
+            },
+            _bindChanged: function (newBind, oldBind) {
+                if (oldBind) {
+                    this._clearFiltersChildren();
+                    return this._stamp();
+                }
+            },
+            _clearFiltersChildren: function () {
+                Object.keys(this.filterModel).forEach(function (currentValue, index, arr) {
+                    Polymer.dom(this.$.filters).removeChild(Polymer.dom(this.$.filters).querySelector('#' + currentValue));
+                }, this);
+            },
+            _onOpenForEdit: function () {
+                this._editMode = true;
+                console.debug(this.is, 'open for editing.');
+            },
+            _stamp: function (filterName) {
+                var bind = {type: Number, value: 100};
+                bind['filter' + filterName] = this.bind;
+                var template = Polymer.dom(this.root).queryDistributedElements('#' + filterName)[0];
+                this.templatize(template);
+//                var clone = this.stamp(bind);
+                var clone = (new template.ctor(bind, template));
+                clone['filter' + filterName] = this.filterModel[filterName] = "";
+                clone.root.children[0].setAttribute('id', filterName);
+                Polymer.dom(this.$.filters).appendChild(clone.root);
+            }
+
+        });
+    </script>
+</dom-module>
