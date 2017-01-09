@@ -1,0 +1,41 @@
+{
+  "domains": [
+    {
+      "id": "time",
+      "label": "Idő",
+      "description": "Szűrés időbélyeg szerint"
+    },
+    {
+      "id": "frequency",
+      "label": "Frekvencia",
+      "description": "Szűrés frekvencia szerint"
+    },
+    {
+      "id": "amplitude",
+      "label": "Amplitúdó",
+      "description": "Szűrés amplitúdó szerint"
+    },
+    {
+      "id": "instrument",
+      "label": "Műszer",
+      "description": "Szűrés műszer szerint"
+    }
+  ],
+  "instruments": [
+    {
+      "id": "narda_rx_3000",
+      "label": "Narda RX-3000",
+      "description": "Narda RX-3000 műszer"
+    },
+    {
+      "id": "esmb",
+      "label": "ESMB",
+      "description": "ESMB műszer"
+    }
+  ],
+  "filter": {
+    "frequency": "7",
+    "amplitude": "1200",
+    "instrument": "300000"
+  }
+}

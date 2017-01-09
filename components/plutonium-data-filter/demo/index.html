@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+        <title>plutonium-data-filter demo</title>
+
+        <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+        <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+        <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+        <link rel="import" href="../../iron-ajax/iron-ajax.html">
+        <link rel="import" href="../../paper-input/paper-input.html">
+        <link rel="import" href="../plutonium-data-filter.html">
+
+        <style is="custom-style" include="demo-pages-shared-styles">
+        </style>
+    </head>
+    <body>
+        <div class="vertical-section-container centered">
+            <h3>Basic plutonium-data-filter demo</h3>
+            <demo-snippet>
+                <template is="dom-bind">
+                    <iron-ajax url="http://localhost:3000/domains" last-response="{{domains}}" auto></iron-ajax>
+
+                    <plutonium-data-filter data-domains="{{domains}}" filter-url="http://localhost:3000/filter">
+                        <template id="time" is="dom-template">
+                            <paper-input name="from" label="Kezdet" type="date">
+                                <!--<div suffix>Hz</div>-->
+                            </paper-input>
+                            <paper-input name="to" label="Vég" type="date">
+                                <!--<div suffix>Hz</div>-->
+                            </paper-input>
+                        </template>
+                        <template id="frequency" is="dom-template" filterfrequency="200">
+                            <paper-input name="frequency" label="Frekvencia" type="number">
+                                <div suffix>Hz</div>
+                            </paper-input>
+                        </template>
+                        <template id="amplitude" is="dom-template">
+                            <paper-input name="amplitude" label="Frekvencia" type="number">
+                                <div suffix>dB</div>
+                            </paper-input>
+                        </template>
+                        <template id="instrument" is="dom-template">
+                            <paper-input name="instrument" label="Frekvencia" type="number">
+                            </paper-input>
+                        </template>
+                    </plutonium-data-filter>
+                </template>
+            </demo-snippet>
+        </div>
+    </body>
+</html>
