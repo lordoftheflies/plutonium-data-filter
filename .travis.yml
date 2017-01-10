@@ -1,8 +1,6 @@
 language: node_js
 sudo: required
 before_install:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
   - npm install bower polymer-cli polylint web-component-tester
 before_script:
   - bower install
@@ -16,5 +14,5 @@ addons:
     packages:
       - google-chrome-stable
 script:
-  - wct --local all
+  - xvfb-run wct
 dist: trusty
