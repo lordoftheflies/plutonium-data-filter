@@ -2,7 +2,7 @@ language: node_js
 sudo: required
 before_script:
   - bower install
-  - polylint --no-follow-dependencies
+  - 'polylint --no-follow-dependencies'
 node_js: '6'
 addons:
   firefox: latest
