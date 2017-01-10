@@ -14,5 +14,5 @@ addons:
     packages:
       - google-chrome-stable
 script:
-  - wct
+  - wct --local ALL
 dist: trusty
