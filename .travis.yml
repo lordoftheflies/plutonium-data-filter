@@ -1,7 +1,7 @@
 language: node_js
 sudo: required
 before_install:
-  - npm install bower polymer-cli polylint web-component-tester
+  - npm install -g bower polymer-cli polylint web-component-tester
 before_script:
   - bower install
   - polylint --no-recursion
@@ -14,5 +14,5 @@ addons:
     packages:
       - google-chrome-stable
 script:
-  - wct --local chrome
+  - wct --local all
 dist: trusty
