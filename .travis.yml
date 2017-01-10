@@ -4,7 +4,7 @@ before_install:
   - npm install -g bower polymer-cli polylint
 before_script:
   - bower install
-  - polylint --no-follow-dependencies
+  - polylint --no-recursion
 node_js: '6'
 addons:
   firefox: latest
