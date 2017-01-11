@@ -14,5 +14,5 @@ addons:
     packages:
       - google-chrome-stable
 script:
-  - xvfb-run -a wct
+  - xvfb-run -a ./node_modules/web-component-tester/bin/wct
 dist: trusty
